@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TutorLink Licence Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one presentation player — a 16:9 line-drawn stage, a caption under it, then a scene track. Light by choice. */
+:root{
+  --bg:#eceff3; --plate:#fbfcfd; --line:#dce0e7;
+  --hi:#121620; --edge:#434b5d; --mid:#a0a7b5; --lo:#e3e6ec;
+  --accent:#93650f; --accent-soft:#f5ead3; --muted:#5d6577;
+  --display:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.32,.72,0,1);
+  --r:18px;
+  --folder:#edf0f5; --paper:#ffffff;
+  color-scheme:light;
+}
+html,body{background:var(--bg)}
+body{color:var(--hi);font-family:var(--display);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;flex-direction:column;gap:20px}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-inline:4px}
+.top h1{margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.top span{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+.player{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--plate);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(18,22,32,.05),0 22px 48px -28px rgba(18,22,32,.28)}
+.stage{position:relative;aspect-ratio:16/9;max-width:100%;container-type:inline-size;perspective:1400px;overflow:hidden;
+  border-bottom:1px solid var(--line);--sw:1.7;--sw2:2.6;--ts:1}
+.stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* drawing */
+.sil{fill:var(--plate);stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round}
+.crease{fill:none;stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round;stroke-linecap:round}
+.win{fill:none;stroke:var(--mid);stroke-width:var(--sw);stroke-linejoin:round;stroke-linecap:round}
+.lo{fill:none;stroke:var(--lo);stroke-width:var(--sw2)}
+.ghost .sil,.ghost .crease{stroke:var(--mid);stroke-dasharray:9 8}
+.tabline{fill:none;stroke:var(--accent);stroke-width:var(--sw2);stroke-linejoin:round;stroke-linecap:round}
+.hot{fill:none;stroke:var(--accent);stroke-width:var(--sw2);stroke-linejoin:round}
+.slot{fill:var(--accent-soft);stroke:var(--accent);stroke-width:var(--sw);stroke-linejoin:round}
+.conn{fill:none;stroke:var(--mid);stroke-width:var(--sw);stroke-dasharray:2 8;stroke-linecap:round}
+.dot{fill:var(--edge)}
+.dot.acc{fill:var(--accent)}
+.ring{fill:none;stroke:var(--accent);stroke-width:var(--sw)}
+.lead{fill:none;stroke:var(--mid);stroke-width:var(--sw)}
+.lead.acc{stroke:var(--accent)}
+.lbl{font-family:var(--mono);font-size:calc(21px * var(--ts));fill:var(--muted);letter-spacing:.03em}
+.lbl.acc{fill:var(--accent);font-weight:500}
+.lbl-sub{font-family:var(--mono);font-size:calc(16px * var(--ts));fill:var(--mid);letter-spacing:.03em}
+.tag-box{fill:var(--plate);stroke:var(--edge);stroke-width:var(--sw)}
+.tag-big{font-family:var(--display);font-size:calc(30px * var(--tts,1));font-weight:600;fill:var(--hi);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.tag-small{font-family:var(--mono);font-size:calc(15px * var(--tts,1));fill:var(--muted);letter-spacing:.03em}
+.city{font-family:var(--display);font-size:calc(23px * var(--ts));font-weight:500;fill:var(--edge)}
+.city.acc{fill:var(--accent);font-weight:600}
+.pin{fill:var(--edge)}
+.pin.acc{fill:var(--accent)}
+.tag-box.acc{stroke:var(--accent);fill:var(--accent-soft)}
+.fbody{fill:var(--folder);stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round}
+.ftab{fill:var(--accent-soft);stroke:var(--accent);stroke-width:var(--sw);stroke-linejoin:round}
+.paper{fill:var(--paper);stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round}
+.fshadow{fill:var(--lo)}
+.fsub{font-family:var(--mono);font-size:calc(15px * var(--ts));fill:var(--muted);letter-spacing:.03em}
+.ficon{fill:none;stroke:var(--edge);stroke-width:calc(var(--sw) * 1.25);stroke-linecap:round;stroke-linejoin:round}
+.fname{font-family:var(--display);font-size:calc(22px * var(--ts));font-weight:600;fill:var(--hi);letter-spacing:-.01em}
+.tag-big.acc{fill:var(--accent)}
+.floor{fill:var(--plate);stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round}
+.door{fill:var(--lo);stroke:var(--edge);stroke-width:var(--sw);stroke-linejoin:round}
+.qr{fill:var(--hi)}
+.boardtxt{font-family:var(--display);font-weight:600;fill:var(--edge)}
+.person{fill:var(--plate);stroke:var(--edge);stroke-width:var(--sw)}
+.phone{fill:var(--plate);stroke:var(--accent);stroke-width:var(--sw)}
+.beam{fill:none;stroke:var(--accent);stroke-width:var(--sw);stroke-dasharray:4 6;stroke-linecap:round}
+.tick{fill:none;stroke:var(--accent);stroke-width:var(--sw2);stroke-linecap:round;stroke-linejoin:round}
+
+/* overlays on the stage */
+.wordmark{position:absolute;left:4.5cqw;top:4cqw;font-size:max(20px,4.4cqw);font-weight:700;letter-spacing:-.035em;line-height:1;pointer-events:none}
+.wordmark small{display:block;margin-top:.9cqw;font-family:var(--mono);font-weight:400;font-size:max(10px,1.15cqw);letter-spacing:.06em;color:var(--muted)}
+.counter{position:absolute;left:4.5cqw;top:5cqw;pointer-events:none;max-width:42cqw}
+.counter .big{font-size:max(18px,4.6cqw);font-weight:700;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+.counter .sub{margin-top:1cqw;font-family:var(--mono);font-size:max(10px,1.2cqw);line-height:1.45;color:var(--muted);letter-spacing:.03em}
+.card{position:absolute;left:50%;top:50%;width:max(232px,40cqw);background:var(--plate);border:1px solid var(--edge);border-radius:14px;
+  padding:max(14px,2.4cqw);display:flex;flex-direction:column;gap:max(10px,1.6cqw);transform-style:preserve-3d;will-change:transform,opacity;pointer-events:none}
+.card::after{content:"";position:absolute;inset:0;border:1px solid var(--mid);border-radius:14px;transform:translate3d(max(6px,1cqw),max(6px,1cqw),-40px);z-index:-1}
+.card-eb{font-family:var(--mono);font-size:max(10px,1.15cqw);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.card-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:max(10px,1.4cqw);border-top:1px solid var(--line)}
+.card-row .k{display:block;font-size:max(12px,1.55cqw);font-weight:500}
+.card-row .s{display:block;margin-top:.35em;font-family:var(--mono);font-size:max(10px,1.05cqw);color:var(--muted);letter-spacing:.03em}
+.card-row .v{font-size:max(20px,3.5cqw);font-weight:700;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.card-row .v.acc{color:var(--accent)}
+.card-foot{font-size:max(11px,1.3cqw);color:var(--muted)}
+
+/* caption */
+.caption{padding:22px max(18px,2.4vw) 20px;min-height:9.2em;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)}
+.cap-eb{font-family:var(--mono);font-size:12px;letter-spacing:.07em;color:var(--accent);font-weight:500}
+.cap-tx{margin:0;font-size:clamp(17px,2.05vw,24px);line-height:1.38;font-weight:500;letter-spacing:-.012em;max-width:52ch;text-wrap:balance}
+.cap-note{margin:0;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--muted);max-width:80ch}
+.caption.in .cap-tx,.caption.in .cap-eb,.caption.in .cap-note{animation:rise .55s var(--ease) both}
+.caption.in .cap-note{animation-delay:.12s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* controls */
+.controls{display:flex;align-items:center;gap:6px;padding:10px 12px}
+.btn{appearance:none;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--hi);width:38px;height:38px;display:grid;place-items:center;cursor:pointer;flex:none}
+.btn:hover{border-color:var(--line);background:var(--bg)}
+.btn:focus-visible,.seg:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.btn svg .f{fill:currentColor;stroke:none}
+.track{flex:1;min-width:0;display:flex;gap:3px;height:38px;align-items:center;margin-inline:6px}
+.seg{appearance:none;border:0;padding:0;background:transparent;height:38px;cursor:pointer;position:relative;min-width:6px;border-radius:4px}
+.seg::before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:var(--lo);border-radius:2px}
+.seg i{position:absolute;left:0;top:50%;height:4px;margin-top:-2px;background:var(--edge);width:0;border-radius:2px}
+.seg.now i{background:var(--accent)}
+.time{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding-inline:4px}
+
+.notes{border:1px solid var(--line);background:var(--plate);border-radius:14px;overflow:hidden}
+.notes summary{cursor:pointer;padding:14px 16px;font-size:14px;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.notes summary::-webkit-details-marker{display:none}
+.notes summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+.notes[open] summary::after{content:"−"}
+.notes summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.notes ul{margin:0;padding:0 16px 16px 34px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.5;color:var(--muted)}
+.notes a{color:var(--hi);text-underline-offset:3px;text-decoration-color:var(--mid)}
+.notes a:hover{text-decoration-color:var(--accent)}
+
+.player:fullscreen{border:0;border-radius:0;justify-content:center;padding:24px;background:var(--bg)}
+.player:fullscreen > *{width:min(100%, calc((100vh - 240px) * 16 / 9));margin-inline:auto;background:var(--plate)}
+.player:fullscreen .stage{border:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
+.player:fullscreen .controls{border-radius:0 0 var(--r) var(--r)}
+
+@media (max-width:560px){
+  .stage{--sw:3;--sw2:4.4}
+  .caption{min-height:11.5em}
+  .time{display:none}
+  .btn{width:36px;height:36px}
+  :root{--r:14px}
+}
+@media (prefers-reduced-motion: reduce){
+  .caption.in .cap-tx,.caption.in .cap-eb,.caption.in .cap-note{animation:none}
+}
+body{margin:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <header class="top">
+    <h1>TutorLink licence</h1>
+    <span>Animated explainer · 1:17</span>
+  </header>
+
+  <figure class="player" id="player" style="margin:0">
+    <div class="stage" id="stage">
+      <svg id="scene" viewBox="0 0 1600 900" role="img" aria-labelledby="sceneLabel">
+        <title id="sceneLabel">Line drawing of a campus building that turns into four folders for students, tutors, lecturers and admin, then a timetable board, then a classroom where students scan a QR code on the board to sign in, then zooms out to show what Blackboard costs across campuses, and ends on the TutorLink licence price.</title>
+      </svg>
+      <div class="wordmark" id="wordmark">TutorLink<small>Built for Rosebank</small></div>
+      <div class="card" id="card" aria-hidden="true">
+        <div class="card-eb">TutorLink licence</div>
+        <div class="card-row" id="cr1"><div><span class="k">Year one</span><span class="s">Founding campus</span></div><span class="v">R35,000</span></div>
+        <div class="card-row" id="cr2"><div><span class="k">Every year after</span><span class="s">From year two</span></div><span class="v acc">R60,000</span></div>
+        <div class="card-foot" id="cf">Built here. Priced in rand.</div>
+      </div>
+    </div>
+
+    <div class="caption" id="caption" aria-live="polite">
+      <div class="cap-eb" id="capEb"></div>
+      <p class="cap-tx" id="capTx"></p>
+      <p class="cap-note" id="capNote"></p>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="btnPlay" type="button" aria-label="Pause">
+        <svg viewBox="0 0 24 24" id="icoPlay"><rect class="f" x="6" y="5" width="4" height="14" rx="1"/><rect class="f" x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+      <button class="btn" id="btnRestart" type="button" aria-label="Restart">
+        <svg viewBox="0 0 24 24"><path d="M5 12a7 7 0 1 0 2.1-5"/><path d="M5 4v4h4"/></svg>
+      </button>
+      <div class="track" id="track" role="group" aria-label="Scenes"></div>
+      <span class="time" id="time">0:00 / 1:17</span>
+      <button class="btn" id="btnFull" type="button" aria-label="Full screen">
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+    </div>
+  </figure>
+
+  <details class="notes">
+    <summary>Sources and notes</summary>
+    <ul>
+      <li>Blackboard list price of $6–$20 per student a year: <a href="https://blog.moodiycloud.com/moodle-vs-canvas-vs-blackboard-2026" target="_blank" rel="noopener">Moodiy Cloud, 2026</a>. The IIE negotiates its own rate, so the real figure is likely lower.</li>
+      <li>About 1,200 students at Rosebank Bloemfontein, the campus's capacity when it opened: <a href="https://pressoffice.mg.co.za/RosebankCollege/content/Olx4zMknGp2756km" target="_blank" rel="noopener">Rosebank press release, Dec 2017</a>.</li>
+      <li>UFS has 38,438 students and is moving from Blackboard to D2L Brightspace: <a href="https://www.ufs.ac.za/about-the-ufs/ufs-in-focus/ufs-in-figures" target="_blank" rel="noopener">UFS in figures</a>, <a href="https://www.ufs.ac.za/templates/news-archive/campus-news/2026/may/ufs-launches-digital-learning-platform-ufs-learn" target="_blank" rel="noopener">UFS Learn launch, May 2026</a>.</li>
+      <li>CUT has 21,993 students and uses Blackboard, called eThuto: <a href="https://en.wikipedia.org/wiki/Central_University_of_Technology,_Free_State" target="_blank" rel="noopener">Wikipedia</a>, <a href="https://cut-za.libguides.com/c.php?g=1432028&amp;p=10634392" target="_blank" rel="noopener">CUT library guide</a>.</li>
+      <li>No campus publishes what it pays. Every yearly cost here is students × Blackboard's list price.</li>
+      <li>R16.64 to the dollar on 26 Oct 2026: <a href="https://poundsterlinglive.com/data/currencies/USD-pairs/USDZAR-exchange-rate" target="_blank" rel="noopener">Pound Sterling Live</a>.</li>
+      <li>Space plays and pauses. The left and right arrow keys jump between scenes.</li>
+    </ul>
+  </details>
+</main>
+
+<script>
+(function(){
+"use strict";
+var END = 77;
+var SCENES = [
+  {n:"Open", a:0, b:4},
+  {n:"What it is", a:4, b:14},
+  {n:"It grows", a:14, b:20},
+  {n:"Attendance", a:20, b:27},
+  {n:"Connected", a:27, b:35},
+  {n:"The bigger plan", a:35, b:45},
+  {n:"What it costs now", a:45, b:59},
+  {n:"The licence", a:59, b:73},
+  {n:"Close", a:73, b:77}
+];
+/* the attendance scene was added at 20–27s; everything drawn before it keeps its own clock, paused while it plays */
+function remap(T){return T<20?T:(T<27?20:T-7);}
+var EST = "Estimate: Blackboard list price of $6–$20 per student a year, at R16.64 to the dollar, for about 1,200 students.";
+var EST2 = "Estimates: students × $6–$20 per student a year, at R16.64 to the dollar. Real contract prices aren’t public.";
+var CAPS = [
+  {t:0, eb:"TutorLink licence", tx:"TutorLink. Built for Rosebank."},
+  {t:4, eb:"01 · What it is", tx:"TutorLink makes running campus tutoring quick and easy. Students, tutors, lecturers and admin each get their own space, built around how Rosebank works."},
+  {t:14, eb:"02 · It grows", tx:"When the campus needs more, new tools slot in. A timetable manager is next."},
+  {t:20, eb:"03 · Attendance", tx:"Attendance tracking is built in. Students scan the QR code on the board and leave. No register, no paperwork."},
+  {t:27, eb:"04 · It’s connected", tx:"Because everything is connected, from attendance to sessions, TutorLink spots at-risk students early, so the campus can make better decisions."},
+  {t:35, eb:"05 · The bigger plan", tx:"Most campus software comes from overseas and is paid in dollars. Next, we want TutorLink to grow and replace those systems."},
+  {t:45, eb:"06 · What it costs now", tx:"Rosebank Bloemfontein pays for Blackboard. That’s about R120,000 to R400,000 a year.", note:EST},
+  {t:49.5, eb:"06 · What it costs now", tx:"The big campuses around us pay far more. UFS and CUT each spend millions a year on their learning platforms.", note:EST2},
+  {t:54, eb:"06 · What it costs now", tx:"TutorLink costs R60,000 a year. That’s about R50 per student.", note:"Blackboard works out to about R100–R333 per student a year."},
+  {t:59, eb:"07 · The licence", tx:"Here’s the licence. Year one costs R35,000. After that, it’s R60,000 a year."},
+  {t:73, eb:"TutorLink", tx:"TutorLink. It grows with Rosebank."}
+];
+
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- maths ---------- */
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+function seg(t,a,b){return t<=a?0:t>=b?1:(t-a)/(b-a);}
+function lerp(a,b,k){return a+(b-a)*k;}
+function eo(x){return 1-Math.pow(1-x,4);}
+function eio(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
+function back(x){if(x<=0)return 0;if(x>=1)return 1;var c1=1.6,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);}
+function frac(x){return x-Math.floor(x);}
+
+/* ---------- isometric camera ---------- */
+var CX=800, CY=470, C30=Math.cos(Math.PI/6);
+var cam={s:1.6,x:0,y:-85};
+function P(x,y,z){var px=(x-y)*C30, py=(x+y)*0.5-z;return [CX+(px-cam.x)*cam.s, CY+(py-cam.y)*cam.s];}
+function pt(a){return a[0].toFixed(1)+" "+a[1].toFixed(1);}
+function poly(ps){var s="M"+pt(ps[0]);for(var i=1;i<ps.length;i++)s+="L"+pt(ps[i]);return s+"Z";}
+function seg2(a,b){return "M"+pt(a)+"L"+pt(b);}
+function rectXZ(x0,x1,y,z0,z1){return poly([P(x0,y,z0),P(x1,y,z0),P(x1,y,z1),P(x0,y,z1)]);}
+
+var CAM=[
+  [0,0,1.6,0,-85],
+  [4.4,6.2,1.1,40,-80],
+  [14.2,15.8,1.1,560,120],
+  [20,21.8,1.12,-675,20],
+  [27,28.8,0.76,-87,28],
+  [35,37,0.78,-9,-392],
+  [45,46.2,1.35,0,-110],
+  [49.5,51,0.55,-40,-330],
+  [56.6,59.2,3.4,0,-110],
+  [73,75,1.6,0,-85]
+];
+function camAt(t){
+  var s=CAM[0][2],x=CAM[0][3],y=CAM[0][4];
+  for(var i=1;i<CAM.length;i++){
+    var c=CAM[i],k=eio(seg(t,c[0],c[1]));
+    if(k<=0)break;
+    s=Math.exp(lerp(Math.log(s),Math.log(c[2]),k));x=lerp(x,c[3],k);y=lerp(y,c[4],k);
+  }
+  cam.s=s;cam.x=x;cam.y=y;
+}
+
+/* ---------- geometry ---------- */
+function boxPaths(x,y,z,w,d,h){
+  var x1=x+w,y1=y+d,z1=z+h,fc=P(x1,y1,z1);
+  return {
+    sil:poly([P(x,y,z1),P(x1,y,z1),P(x1,y,z),P(x1,y1,z),P(x,y1,z),P(x,y1,z1)]),
+    crease:"M"+pt(P(x1,y,z1))+"L"+pt(fc)+"L"+pt(P(x,y1,z1))+"M"+pt(fc)+"L"+pt(P(x1,y1,z))
+  };
+}
+function windowsPath(x,y,z,w,d,h){
+  var x1=x+w,y1=y+d,s="",r,c,za,zb,ya,yb,xa,xb;
+  var rows=Math.max(2,Math.round(h/56)),fh=h/rows;
+  var cR=Math.max(2,Math.round(d/42)),cwR=d/cR;
+  var cL=Math.max(2,Math.round(w/42)),cwL=w/cL,door=Math.floor(cL/2);
+  for(r=0;r<rows;r++){
+    za=z+r*fh+fh*0.32;zb=za+fh*0.4;
+    for(c=0;c<cR;c++){ya=y+c*cwR+cwR*0.3;yb=ya+cwR*0.4;s+=poly([P(x1,ya,za),P(x1,yb,za),P(x1,yb,zb),P(x1,ya,zb)]);}
+    for(c=0;c<cL;c++){
+      if(r===0&&c===door){xa=x+c*cwL+cwL*0.16;xb=xa+cwL*0.68;s+=poly([P(xa,y1,z),P(xb,y1,z),P(xb,y1,z+fh*0.78),P(xa,y1,z+fh*0.78)]);continue;}
+      xa=x+c*cwL+cwL*0.3;xb=xa+cwL*0.4;s+=poly([P(xa,y1,za),P(xb,y1,za),P(xb,y1,zb),P(xa,y1,zb)]);
+    }
+  }
+  return s;
+}
+function roofPath(x,y,w,d,h){var i=Math.min(12,w*0.06);return poly([P(x+i,y+i,h),P(x+w-i,y+i,h),P(x+w-i,y+d-i,h),P(x+i,y+d-i,h)]);}
+
+/* ---------- SVG building ---------- */
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+var svg=document.getElementById("scene");
+var gWorld=el("g",{},svg), gGhost=el("g",{"class":"ghost"},gWorld), gTown=el("g",{},gWorld), gFiles=el("g",{},gWorld), gTags=el("g",{},svg);
+
+function makeBuilding(parent,spec){
+  var g=el("g",{},parent),o={spec:spec,g:g};
+  if(spec.ground)o.ground=el("path",{"class":"lo"},g);
+  o.sil=el("path",{"class":"sil"},g);
+  if(spec.windows){o.win=el("path",{"class":"win"},g);o.roof=el("path",{"class":"win"},g);}
+  o.crease=el("path",{"class":"crease"},g);
+  return o;
+}
+function drawBuilding(o,k,op,heightOnly){
+  var s=o.spec;
+  if(op<=0.002||k<=0.002){o.g.setAttribute("opacity","0");return null;}
+  o.g.setAttribute("opacity",op.toFixed(3));
+  var wd=heightOnly?1:Math.max(eo(k),0.01),hh=Math.max(heightOnly?eo(k):back(k),0.01);
+  var w=s.w*wd,d=s.d*wd,h=s.h*hh,x=s.x+(s.w-w)/2,y=s.y+(s.d-d)/2;
+  var b=boxPaths(x,y,0,w,d,h);
+  o.sil.setAttribute("d",b.sil);o.crease.setAttribute("d",b.crease);
+  if(o.win){o.win.setAttribute("d",windowsPath(x,y,0,w,d,h));o.roof.setAttribute("d",roofPath(x,y,w,d,h));}
+  if(o.ground){var m=28;o.ground.setAttribute("d",poly([P(x-m,y-m,0),P(x+w+m,y-m,0),P(x+w+m,y+d+m,0),P(x-m,y+d+m,0)]));}
+  return P(x+w/2,y+d/2,h);
+}
+
+/* ghost: the future learning platform */
+var ghost=makeBuilding(gGhost,{x:-520,y:-480,w:380,d:320,h:380});
+var ghostLead=el("path",{"class":"lead"},gGhost);
+var ghostLbl=el("text",{"class":"lbl"},gGhost);ghostLbl.textContent="TutorLink, grown";
+var ghostSub=el("text",{"class":"lbl-sub"},gGhost);ghostSub.textContent="Replacing those systems";
+
+/* the town: Rosebank Bloemfontein at the centre, then the big campuses around it (UFS top right, CUT top left) */
+var town=[];
+var main={spec:{x:-110,y:-80,w:220,d:160,h:170,windows:true,ground:true},kind:"main"};
+town.push(main);
+var NEAR=[
+  {who:"ufs",j:0,spec:{x:-90,y:-870,w:300,d:220,h:280,windows:true},anchor:true},
+  {who:"ufs",j:1,spec:{x:300,y:-780,w:220,d:160,h:200,windows:true}},
+  {who:"ufs",j:2,spec:{x:90,y:-540,w:200,d:150,h:160,windows:true}},
+  {who:"cut",j:3,spec:{x:-840,y:-40,w:280,d:200,h:230,windows:true},anchor:true},
+  {who:"cut",j:4,spec:{x:-860,y:300,w:200,d:150,h:160,windows:true}}
+];
+NEAR.forEach(function(b){b.kind="near";town.push(b);});
+town.slice().sort(function(a,b){return (a.spec.x+a.spec.w/2+a.spec.y+a.spec.d/2)-(b.spec.x+b.spec.w/2+b.spec.y+b.spec.d/2);}).forEach(function(b){b.o=makeBuilding(gTown,b.spec);});
+[main.o.sil,main.o.crease,main.o.win,main.o.roof,main.o.ground].forEach(function(p){p.setAttribute("pathLength","1");});
+main.o.hl=el("path",{"class":"hot"},main.o.g);
+
+/* ---------- the files: one folder per role, then the timetable board ---------- */
+var FD={w:180,h:150,fh:111,tab:22,tw:62,yb:-60,gap:16,tilt:16};
+var ROLES=[
+  {name:"Students",sub:"Check-ins · progress",icon:"cap"},
+  {name:"Tutors",sub:"Sessions · pay",icon:"book"},
+  {name:"Lecturers",sub:"Modules · tutors",icon:"board"},
+  {name:"Admin",sub:"Applications · finance",icon:"sliders"}
+];
+/* role icons, drawn on each folder's front in a -1..1 box (y up) */
+var ICONS={
+  cap:[[[-1,.3],[0,.72],[1,.3],[0,-.12],[-1,.3]],[[-.56,.06],[-.56,-.4],[0,-.62],[.56,-.4],[.56,.06]],[[.8,.22],[.8,-.38]],{c:[.8,-.48],r:.1}],
+  book:[[[0,-.55],[-1,-.4],[-1,.62],[0,.47],[1,.62],[1,-.4],[0,-.55],[0,.47]],[[-.78,.24],[-.22,.14]],[[-.78,-.02],[-.22,-.12]],[[.22,.14],[.78,.24]],[[.22,-.12],[.78,-.02]]],
+  board:[[[-1,-.3],[1,-.3],[1,.75],[-1,.75],[-1,-.3]],[[-.45,-.3],[-.68,-.9]],[[.45,-.3],[.68,-.9]],[[-.66,-.04],[-.22,.26],[.14,.08],[.64,.5]]],
+  sliders:(function(){var o=[];[[-.62,.32],[0,-.34],[.62,.5]].forEach(function(s){o.push([[s[0],-.85],[s[0],s[1]-.2]],[[s[0],s[1]+.2],[s[0],.85]],{c:[s[0],s[1]],r:.2});});return o;})()
+};
+/* drawing on any flat plane: origin o, width axis u, height axis v */
+function planeM(ox,oy,oz,ux,uy,uz,vx,vy,vz){return function(a,b){return P(ox+ux*a+vx*b,oy+uy*a+vy*b,oz+uz*a+vz*b);};}
+function arcPts(pts,M,cx,cy,r,s,e,n){n=n||5;for(var q=0;q<=n;q++){var t=s+(e-s)*q/n;pts.push(M(cx+r*Math.cos(t),cy+r*Math.sin(t)));}}
+function rrect(M,a0,b0,a1,b1,rt,rb){
+  var pts=[];
+  if(rb>0)arcPts(pts,M,a0+rb,b0+rb,rb,Math.PI,1.5*Math.PI);else pts.push(M(a0,b0));
+  if(rb>0)arcPts(pts,M,a1-rb,b0+rb,rb,1.5*Math.PI,2*Math.PI);else pts.push(M(a1,b0));
+  if(rt>0)arcPts(pts,M,a1-rt,b1-rt,rt,0,.5*Math.PI);else pts.push(M(a1,b1));
+  if(rt>0)arcPts(pts,M,a0+rt,b1-rt,rt,.5*Math.PI,Math.PI);else pts.push(M(a0,b1));
+  return poly(pts);
+}
+function circlePath(M,cx,cy,r){var pts=[];arcPts(pts,M,cx,cy,r,0,2*Math.PI,20);return poly(pts);}
+function backPath(M,W,H,tw,th,r){
+  var pts=[M(0,0),M(W,0)];
+  arcPts(pts,M,W-r,H-r,r,0,.5*Math.PI);
+  pts.push(M(tw+22,H),M(tw+7,H+th-3),M(tw,H+th));
+  arcPts(pts,M,r,H+th-r,r,.5*Math.PI,Math.PI);
+  return poly(pts);
+}
+function tabPath(M,H,tw,th,r){
+  var pts=[M(0,H),M(tw+22,H),M(tw+7,H+th-3),M(tw,H+th)];
+  arcPts(pts,M,r,H+th-r,r,.5*Math.PI,Math.PI);
+  return poly(pts);
+}
+function flapPath(M,W,Hf,r,nr){
+  var pts=[M(0,0),M(W,0)];
+  arcPts(pts,M,W-r,Hf-r,r,0,.5*Math.PI);
+  arcPts(pts,M,W/2,Hf,nr,0,-Math.PI,10);
+  arcPts(pts,M,r,Hf-r,r,.5*Math.PI,Math.PI);
+  return poly(pts);
+}
+function iconPath(M,cx,cy,s,list){
+  var d="";
+  list.forEach(function(it){
+    var pts=[];
+    if(it.c)arcPts(pts,function(a,b){return M(cx+a*s,cy+b*s);},it.c[0],it.c[1],it.r,0,2*Math.PI,16);
+    else it.forEach(function(p){pts.push(M(cx+p[0]*s,cy+p[1]*s));});
+    d+="M"+pts.map(pt).join("L");
+  });
+  return d;
+}
+var gRail=el("g",{},gFiles);
+var rail={line:el("path",{"class":"conn"},gRail),drops:[],dots:[]};
+for(var di=0;di<6;di++)rail.drops.push(el("path",{"class":"conn"},gRail));
+for(di=0;di<7;di++)rail.dots.push(el("circle",{"class":"dot",r:5},gRail));
+var folders=ROLES.map(function(R,i){
+  var g=el("g",{},gFiles),o={g:g,R:R,i:i,x0:-440+i*230};
+  o.shadow=el("path",{"class":"fshadow"},g);
+  o.back=el("path",{"class":"fbody"},g);
+  o.tab=el("path",{"class":"ftab"},g);
+  o.p1=el("path",{"class":"paper"},g);
+  o.p2=el("path",{"class":"paper"},g);
+  o.av=el("path",{"class":"win"},g);
+  o.lines=el("path",{"class":"win"},g);
+  o.hot=el("path",{"class":"hot"},g);
+  o.gus=el("path",{"class":"fbody"},g);
+  o.pleat=el("path",{"class":"win"},g);
+  o.flap=el("path",{"class":"fbody"},g);
+  o.icon=el("path",{"class":"ficon"},g);
+  o.lbl=el("text",{"class":"fname","text-anchor":"middle"},g);o.lbl.textContent=R.name;
+  o.sub=el("text",{"class":"fsub","text-anchor":"middle"},g);o.sub.textContent=R.sub;
+  return o;
+});
+var TT={x:480,y:-60,d:14,w:420,h:260,z:30};
+var tt={g:el("g",{},gFiles)};
+tt.legs=el("path",{"class":"crease"},tt.g);
+tt.sil=el("path",{"class":"sil"},tt.g);
+tt.crease=el("path",{"class":"crease"},tt.g);
+tt.grid=el("path",{"class":"win"},tt.g);
+var SLOTS=[[0,0],[2,0],[4,0],[1,1],[3,1],[0,2],[2,2],[4,2],[1,3],[3,3]];
+tt.slots=SLOTS.map(function(){return el("path",{"class":"slot"},tt.g);});
+tt.lbl=el("text",{"class":"lbl acc","text-anchor":"middle"},tt.g);tt.lbl.textContent="Timetable";
+/* ---------- the classroom: attendance by QR code ---------- */
+var RM={x0:-500,x1:-60,y0:340,y1:660,h:220,wt:14};
+var BD={x0:-430,x1:-150,z0:90,z1:192};
+var QR={x0:-224,n:11,m:6,z1:180};
+var room={g:el("g",{},gFiles)};
+room.floor=el("path",{"class":"floor"},room.g);
+room.tiles=el("path",{"class":"lo"},room.g);
+room.lw={sil:el("path",{"class":"sil"},room.g),crease:el("path",{"class":"crease"},room.g)};
+room.door=el("path",{"class":"door"},room.g);
+room.bw={sil:el("path",{"class":"sil"},room.g),crease:el("path",{"class":"crease"},room.g)};
+room.board=el("path",{"class":"sil"},room.g);
+room.boardLines=el("path",{"class":"win"},room.g);
+room.qr=el("path",{"class":"qr"},room.g);
+room.t1=el("text",{"class":"boardtxt"},room.g);room.t1.textContent="Scan to sign in";
+room.t2=el("text",{"class":"boardtxt"},room.g);room.t2.textContent="Signed in: 0";
+var DESKS=[],PEOPLE=[];
+var SEATS=[[0,0],[2,0],[1,1],[2,1]];
+for(var rr=0;rr<2;rr++){
+  for(var cc=0;cc<3;cc++){
+    var dk={x:-420+cc*120,y:440+rr*100,w:70,d:34,h:34,i:DESKS.length};
+    dk.sil=el("path",{"class":"sil"},room.g);dk.crease=el("path",{"class":"crease"},room.g);
+    DESKS.push(dk);
+  }
+  SEATS.forEach(function(s,j){
+    if(s[1]!==rr)return;
+    var p={j:j,sx:-420+s[0]*120+35,sy:440+rr*100+60};
+    p.beam=el("path",{"class":"beam"},room.g);
+    p.body=el("path",{"class":"person"},room.g);
+    p.head=el("circle",{"class":"person"},room.g);
+    p.phone=el("path",{"class":"phone"},room.g);
+    p.tick=el("path",{"class":"tick"},room.g);
+    PEOPLE.push(p);
+  });
+}
+room.lbl=el("text",{"class":"lbl acc","text-anchor":"middle"},room.g);room.lbl.textContent="Attendance";
+function qrOn(i,j){
+  var n=QR.n;
+  var fin=function(a,b){return a<3&&b<3;};
+  if(fin(i,j)||fin(n-1-i,j)||fin(i,n-1-j))return true;
+  if((i<4&&j<4)||(i>n-5&&j<4)||(i<4&&j>n-5))return false;
+  return ((i*7+j*13+i*j*3)%5)<2;
+}
+function roundRect(x0,y0,x1,y1,r){
+  return "M"+(x0+r).toFixed(1)+" "+y0.toFixed(1)+"H"+(x1-r).toFixed(1)+"A"+r.toFixed(1)+" "+r.toFixed(1)+" 0 0 1 "+x1.toFixed(1)+" "+(y0+r).toFixed(1)+
+         "V"+y1.toFixed(1)+"H"+x0.toFixed(1)+"V"+(y0+r).toFixed(1)+"A"+r.toFixed(1)+" "+r.toFixed(1)+" 0 0 1 "+(x0+r).toFixed(1)+" "+y0.toFixed(1)+"Z";
+}
+function boardText(e,x,z,size){
+  var o=P(x,RM.y0,z),s=cam.s;
+  e.setAttribute("transform","matrix("+(C30*s).toFixed(4)+" "+(0.5*s).toFixed(4)+" 0 "+s.toFixed(4)+" "+o[0].toFixed(1)+" "+o[1].toFixed(1)+")");
+  e.setAttribute("font-size",String(size));
+}
+function drawRoom(T){
+  var out=1-seg(T,35,36.2),op=seg(T,20.2,20.8)*out;
+  if(op<=0.002){hide(room.g);return;}
+  setOp(room.g,op);
+  var rk=Math.max(eo(seg(T,20.3,21.4)),0.01),h=RM.h*rk;
+  room.floor.setAttribute("d",poly([P(RM.x0,RM.y0,0),P(RM.x1,RM.y0,0),P(RM.x1,RM.y1,0),P(RM.x0,RM.y1,0)]));
+  var tl="";
+  for(var ty=RM.y0+80;ty<RM.y1;ty+=80)tl+=seg2(P(RM.x0,ty,0),P(RM.x1,ty,0));
+  for(var tx=RM.x0+110;tx<RM.x1;tx+=110)tl+=seg2(P(tx,RM.y0,0),P(tx,RM.y1,0));
+  room.tiles.setAttribute("d",tl);
+  var lw=boxPaths(RM.x0-RM.wt,RM.y0-RM.wt,0,RM.wt,RM.y1-RM.y0+RM.wt,h);
+  room.lw.sil.setAttribute("d",lw.sil);room.lw.crease.setAttribute("d",lw.crease);
+  var dz=Math.min(130,h);
+  room.door.setAttribute("d",poly([P(RM.x0,575,0),P(RM.x0,640,0),P(RM.x0,640,dz),P(RM.x0,575,dz)]));
+  var bw=boxPaths(RM.x0,RM.y0-RM.wt,0,RM.x1-RM.x0,RM.wt,h);
+  room.bw.sil.setAttribute("d",bw.sil);room.bw.crease.setAttribute("d",bw.crease);
+
+  /* board with the QR code */
+  var bOp=seg(T,21,21.6);
+  [room.board,room.boardLines,room.qr,room.t1,room.t2].forEach(function(e){setOp(e,bOp);});
+  if(bOp>0.002){
+    var y=RM.y0;
+    room.board.setAttribute("d",rectXZ(BD.x0,BD.x1,y,BD.z0,BD.z1));
+    room.boardLines.setAttribute("d",seg2(P(BD.x0-8,y,BD.z0-6),P(BD.x1+8,y,BD.z0-6))+seg2(P(BD.x0+16,y,BD.z0+16),P(BD.x0+100,y,BD.z0+16)));
+    var q="",m=QR.m;
+    for(var i=0;i<QR.n;i++)for(var j=0;j<QR.n;j++){if(qrOn(i,j))q+=rectXZ(QR.x0+i*m,QR.x0+(i+1)*m,y,QR.z1-(j+1)*m,QR.z1-j*m);}
+    room.qr.setAttribute("d",q);
+    boardText(room.t1,BD.x0+16,BD.z1-32,21);
+    boardText(room.t2,BD.x0+16,BD.z1-60,18);
+  }
+
+  /* desks pop up */
+  DESKS.forEach(function(dk){
+    var k=seg(T,21.2+dk.i*0.07,21.7+dk.i*0.07);
+    if(k<=0){hide(dk.sil);hide(dk.crease);return;}
+    setOp(dk.sil,1);setOp(dk.crease,1);
+    var b=boxPaths(dk.x,dk.y,0,dk.w,dk.d,dk.h*Math.max(back(k),0.01));
+    dk.sil.setAttribute("d",b.sil);dk.crease.setAttribute("d",b.crease);
+  });
+
+  /* students scan the code, get a tick, and walk out */
+  var qc=P(QR.x0+QR.n*QR.m/2,RM.y0,QR.z1-QR.n*QR.m/2),signed=0,s=cam.s;
+  PEOPLE.forEach(function(p){
+    var s0=22.2+p.j*1.05;
+    if(T>=s0+0.5)signed++;
+    var pOp=seg(T,21.5,22.1)*(1-seg(T,s0+1.55,s0+1.9));
+    var els=[p.body,p.head,p.phone,p.beam,p.tick];
+    if(pOp<=0.002){els.forEach(hide);return;}
+    var wk=eio(seg(T,s0+0.75,s0+1.85)),x=lerp(p.sx,RM.x0+24,wk),y=lerp(p.sy,607,wk);
+    var F=P(x,y,0),Sh=P(x,y,64),Hd=P(x,y,84);
+    p.body.setAttribute("d",roundRect(F[0]-12*s,Sh[1],F[0]+12*s,F[1],11*s));setOp(p.body,pOp);
+    p.head.setAttribute("cx",Hd[0].toFixed(1));p.head.setAttribute("cy",(Hd[1]-2*s).toFixed(1));p.head.setAttribute("r",(10.5*s).toFixed(1));setOp(p.head,pOp);
+    var phOp=seg(T,s0,s0+0.2)*(1-seg(T,s0+0.9,s0+1.1));
+    var px0=F[0]+14*s,py0=Sh[1]+4*s;
+    p.phone.setAttribute("d",roundRect(px0,py0,px0+11*s,py0+17*s,2.5*s));setOp(p.phone,phOp*pOp);
+    var bmOp=seg(T,s0+0.15,s0+0.3)*(1-seg(T,s0+0.55,s0+0.7));
+    p.beam.setAttribute("d",seg2([px0+4.5*s,py0],qc));setOp(p.beam,bmOp*pOp);
+    var tkOp=seg(T,s0+0.45,s0+0.6)*(1-seg(T,s0+1.2,s0+1.5)),tc=[Hd[0],Hd[1]-30*s];
+    p.tick.setAttribute("d","M"+(tc[0]-7*s).toFixed(1)+" "+tc[1].toFixed(1)+"L"+(tc[0]-2*s).toFixed(1)+" "+(tc[1]+5*s).toFixed(1)+"L"+(tc[0]+8*s).toFixed(1)+" "+(tc[1]-6*s).toFixed(1));setOp(p.tick,tkOp*pOp);
+  });
+  room.t2.textContent="Signed in: "+signed;
+
+  var lp=P(RM.x1,RM.y1,0);
+  room.lbl.setAttribute("x",lp[0].toFixed(1));room.lbl.setAttribute("y",(lp[1]+44*ts).toFixed(1));
+  setOp(room.lbl,seg(T,21.4,22.2));
+}
+
+var gFlag=el("g",{},gFiles);
+var flag={ring:el("circle",{"class":"ring"},gFlag),dot:el("circle",{"class":"dot acc",r:7},gFlag),lead:el("path",{"class":"lead acc"},gFlag),txt:el("text",{"class":"lbl acc","text-anchor":"end"},gFlag)};
+flag.txt.textContent="At risk";
+
+/* price tags: a small label line over a big price */
+function makeTag(l1,l2,acc){
+  var g=el("g",{},gTags),o={g:g};
+  o.lead=el("path",{"class":"lead"+(acc?" acc":"")},g);
+  o.pin=el("circle",{"class":"pin"+(acc?" acc":""),r:4},g);
+  o.box=el("rect",{"class":"tag-box"+(acc?" acc":"")},g);
+  o.t1=el("text",{"class":"tag-small","text-anchor":"middle"},g);o.t1.textContent=l1;
+  o.t2=el("text",{"class":"tag-big"+(acc?" acc":""),"text-anchor":"middle"},g);o.t2.textContent=l2;
+  return o;
+}
+function placeTag(o,r,op,L,below){
+  if(!r||op<=0.002){hide(o.g);return;}
+  setOp(o.g,op);
+  var w=Math.max(o.t1.getComputedTextLength(),o.t2.getComputedTextLength())+40*tts,h=80*tts;
+  var end=below?[r[0],r[1]+L]:[r[0],r[1]-L],by=below?end[1]:end[1]-h;
+  o.lead.setAttribute("d",seg2(r,end));
+  o.pin.setAttribute("cx",r[0].toFixed(1));o.pin.setAttribute("cy",r[1].toFixed(1));
+  o.box.setAttribute("x",(r[0]-w/2).toFixed(1));o.box.setAttribute("y",by.toFixed(1));
+  o.box.setAttribute("width",w.toFixed(1));o.box.setAttribute("height",h.toFixed(1));o.box.setAttribute("rx",(12*tts).toFixed(1));
+  o.t1.setAttribute("x",r[0].toFixed(1));o.t1.setAttribute("y",(by+29*tts).toFixed(1));
+  o.t2.setAttribute("x",r[0].toFixed(1));o.t2.setAttribute("y",(by+63*tts).toFixed(1));
+}
+var tagRB=makeTag("Rosebank Bloemfontein · Blackboard","R120k – R400k a year",false);
+var tagUFS=makeTag("UFS · Blackboard, moving to Brightspace","R3.8m – R12.8m a year",false);
+var tagCUT=makeTag("CUT · Blackboard (eThuto)","R2.2m – R7.3m a year",false);
+var tagTL=makeTag("TutorLink · about R50 per student","R60k a year",true);
+
+/* ---------- HTML refs ---------- */
+var stage=document.getElementById("stage"),wordmark=document.getElementById("wordmark");
+var card=document.getElementById("card"),cr1=document.getElementById("cr1"),cr2=document.getElementById("cr2"),cf=document.getElementById("cf");
+var caption=document.getElementById("caption"),capEb=document.getElementById("capEb"),capTx=document.getElementById("capTx"),capNote=document.getElementById("capNote");
+var timeEl=document.getElementById("time"),btnPlay=document.getElementById("btnPlay"),icoPlay=document.getElementById("icoPlay");
+var track=document.getElementById("track");
+var ts=1,tts=1;
+
+function setOp(e,v){e.setAttribute("opacity",clamp(v,0,1).toFixed(3));}
+function hide(e){e.setAttribute("opacity","0");}
+
+/* ---------- files scenes ---------- */
+function drawFiles(t){
+  var out=1-seg(t,28,29.2);
+  var studentPaperTop=null;
+  folders.forEach(function(o){
+    var i=o.i,k=seg(t,4.6+i*0.35,5.5+i*0.35),op=Math.min(1,k*2)*out;
+    if(op<=0.002){hide(o.g);return;}
+    setOp(o.g,op);
+    var x=o.x0,W=FD.w,H=FD.h,Hf=FD.fh,yb=FD.yb,yf=yb+FD.gap;
+    var z=(1-eo(k))*70;                                   /* drops in onto the floor */
+    var oa=eo(seg(t,5.3+i*0.35,6.4+i*0.35));              /* then opens */
+    var th=FD.tilt*Math.PI/180*oa,sn=Math.sin(th),cs=Math.cos(th);
+    /* soft footprint on the floor */
+    o.shadow.setAttribute("d",rrect(planeM(x,yb,0,1,0,0,0,1,0),-10,-10,W+10,FD.gap+Hf*sn+12,12,12));
+    setOp(o.shadow,k);
+    /* back panel with the gold tab */
+    var Mb=planeM(x,yb,z,1,0,0,0,0,1);
+    o.back.setAttribute("d",backPath(Mb,W,H,FD.tw,FD.tab,12));
+    o.tab.setAttribute("d",tabPath(Mb,H,FD.tw,FD.tab,12));
+    /* two records rising out */
+    var Mp1=planeM(x,yb+5,z,1,0,0,0,0,1),Mp2=planeM(x,yb+10,z,1,0,0,0,0,1),top2=H-20+oa*26;
+    o.p1.setAttribute("d",rrect(Mp1,12,4,W-24,H-8+oa*14,5,0));
+    o.p2.setAttribute("d",rrect(Mp2,24,4,W-10,top2,5,0));
+    o.av.setAttribute("d",circlePath(Mp2,44,top2-20,8));
+    var ls=seg2(Mp2(60,top2-16),Mp2(118,top2-16))+seg2(Mp2(60,top2-27),Mp2(96,top2-27)),BL=[W-36,W-60,W-46];
+    for(var r=0;r<3;r++){var lb=top2-46-r*12;ls+=seg2(Mp2(36,lb),Mp2(BL[r],lb));}
+    o.lines.setAttribute("d",ls);
+    o.hot.setAttribute("d",rrect(Mp2,24,4,W-10,top2,5,0));
+    if(i===0){studentPaperTop=Mp2((24+W-10)/2,top2);setOp(o.hot,seg(t,22.4,23)*(1-seg(t,27.4,28)));}else hide(o.hot);
+    /* the front flap tips forward; the accordion side opens with it */
+    var Mf=planeM(x,yf,z,1,0,0,0,sn,cs);
+    var gb=P(x+W,yb,z),gf=P(x+W,yf,z),gft=Mf(W,Hf),gbt=P(x+W,yb,z+Hf),gm=P(x+W,yb+FD.gap/2,z);
+    o.gus.setAttribute("d",poly([gb,gf,gft,gbt]));
+    var mix=function(q){return [lerp(gbt[0],gft[0],q),lerp(gbt[1],gft[1],q)];};
+    o.pleat.setAttribute("d",seg2(gm,mix(1/3))+seg2(gm,mix(2/3)));setOp(o.pleat,oa);
+    o.flap.setAttribute("d",flapPath(Mf,W,Hf,12,17));
+    o.icon.setAttribute("d",iconPath(Mf,W/2,Hf*0.45,25,ICONS[o.R.icon]));
+    /* name and what's inside */
+    var lp=P(x+W/2,yf,0);
+    o.lbl.setAttribute("x",lp[0].toFixed(1));o.lbl.setAttribute("y",(lp[1]+60*ts).toFixed(1));
+    setOp(o.lbl,seg(t,6.2+i*0.35,7+i*0.35));
+    o.sub.setAttribute("x",lp[0].toFixed(1));o.sub.setAttribute("y",(lp[1]+86*ts).toFixed(1));
+    setOp(o.sub,ts>1.3?0:seg(t,6.6+i*0.35,7.4+i*0.35)*(1-seg(t,13.6,14.2)));
+  });
+
+  /* timetable board */
+  var tk=seg(t,14.4,15.8),tOp=seg(t,14.4,15)*out;
+  if(tOp>0.002){
+    setOp(tt.g,tOp);
+    var x=TT.x+(1-eo(tk))*260,y=TT.y,y1=y+TT.d,w=TT.w,z0=TT.z,z1=TT.z+TT.h;
+    var b=boxPaths(x,y,z0,w,TT.d,TT.h);
+    tt.sil.setAttribute("d",b.sil);tt.crease.setAttribute("d",b.crease);
+    var lg="",lx=[x+44,x+w-44];
+    lx.forEach(function(q){lg+=seg2(P(q,y1,0),P(q,y1,z0))+seg2(P(q,y-12,0),P(q,y1+18,0));});
+    tt.legs.setAttribute("d",lg);
+    var gx0=x+18,gx1=x+w-18,gz0=z0+18,gz1=z1-18,hz=gz1-34,cw=(gx1-gx0)/5,rh=(hz-gz0)/4,gs=rectXZ(gx0,gx1,y1,gz0,gz1)+seg2(P(gx0,y1,hz),P(gx1,y1,hz));
+    for(var c=1;c<5;c++)gs+=seg2(P(gx0+c*cw,y1,gz0),P(gx0+c*cw,y1,gz1));
+    for(var r=1;r<4;r++)gs+=seg2(P(gx0,y1,gz0+r*rh),P(gx1,y1,gz0+r*rh));
+    for(c=0;c<5;c++){var mx=gx0+c*cw+cw/2;gs+=seg2(P(mx-12,y1,(hz+gz1)/2),P(mx+12,y1,(hz+gz1)/2));}
+    tt.grid.setAttribute("d",gs);
+    SLOTS.forEach(function(s,j){
+      var sk=seg(t,15.9+j*0.2,16.4+j*0.2),e=eo(sk);
+      if(sk<=0){hide(tt.slots[j]);return;}
+      setOp(tt.slots[j],Math.min(1,sk*2));
+      var cx=gx0+s[0]*cw+cw/2,cz=hz-s[1]*rh-rh/2,hw=(cw/2-7)*e,hh=(rh/2-7)*e;
+      tt.slots[j].setAttribute("d",rectXZ(cx-hw,cx+hw,y1,cz-hh,cz+hh));
+    });
+    var lp=P(x+w/2,y1,0);
+    tt.lbl.setAttribute("x",lp[0].toFixed(1));tt.lbl.setAttribute("y",(lp[1]+40*ts).toFixed(1));
+    setOp(tt.lbl,seg(t,15.6,16.4));
+  }else hide(tt.g);
+
+  /* everything connected: a line along the floor that data travels on */
+  var lineOp=seg(t,20,21)*(1-seg(t,28,28.6));
+  if(lineOp>0.002){
+    setOp(gRail,lineOp);
+    var ry=30;
+    rail.line.setAttribute("d",seg2(P(-350,ry,0),P(760,ry,0)));
+    folders.forEach(function(o,i){var xc=o.x0+FD.w/2;rail.drops[i].setAttribute("d",seg2(P(xc,FD.yb+FD.gap+2,0),P(xc,ry,0)));});
+    rail.drops[4].setAttribute("d",seg2(P(690,TT.y+TT.d+2,0),P(690,ry,0)));
+    rail.drops[5].setAttribute("d",seg2(P(-350,ry,0),P(-350,RM.y0-RM.wt-2,0)));
+    var dotsOn=seg(t,20.6,21.4)*(1-seg(t,27.4,28)),run=(RM.y0-RM.wt-ry)+(690+350);
+    rail.dots.forEach(function(d,j){
+      var ph=frac((t-20)*0.28+j/7),sd=ph*run,leg=RM.y0-RM.wt-ry;
+      var q=sd<leg?P(-350,RM.y0-RM.wt-sd,0):P(-350+(sd-leg),ry,0);
+      d.setAttribute("cx",q[0].toFixed(1));d.setAttribute("cy",q[1].toFixed(1));
+      setOp(d,dotsOn*Math.sin(ph*Math.PI));
+    });
+  }else hide(gRail);
+
+  /* at-risk flag on the students folder */
+  var fOp=seg(t,22.4,23)*(1-seg(t,27.4,28));
+  if(fOp>0.002&&studentPaperTop){
+    setOp(gFlag,fOp);
+    var f=studentPaperTop,rp=reduce?0.4:frac((t-22.4)/1.4);
+    flag.dot.setAttribute("cx",f[0].toFixed(1));flag.dot.setAttribute("cy",f[1].toFixed(1));
+    flag.ring.setAttribute("cx",f[0].toFixed(1));flag.ring.setAttribute("cy",f[1].toFixed(1));flag.ring.setAttribute("r",(9+28*rp).toFixed(1));setOp(flag.ring,1-rp);
+    flag.lead.setAttribute("d",seg2([f[0]-14,f[1]],[f[0]-96,f[1]]));
+    flag.txt.setAttribute("x",(f[0]-104).toFixed(1));flag.txt.setAttribute("y",(f[1]+7).toFixed(1));
+  }else hide(gFlag);
+}
+
+/* ---------- render: everything is a function of time ---------- */
+function render(T){
+  var t=remap(T);
+  camAt(T);
+  var worldOp=clamp(1-0.88*seg(t,52,53.2)+0.88*seg(t,66,67),0,1);
+  setOp(gWorld,worldOp);setOp(gTags,worldOp);
+
+  /* main building: draws itself in, steps aside for the files, comes back */
+  var mOp=clamp(1-seg(t,4,5)+seg(t,29.6,30.8),0,1);
+  var top=drawBuilding(main.o,1,mOp,true);
+  var dr=eo(seg(t,0.15,2.4));
+  var parts=[main.o.sil,main.o.crease,main.o.win,main.o.roof,main.o.ground];
+  if(dr<1){parts.forEach(function(p){p.style.strokeDasharray="1 1";p.style.strokeDashoffset=String(1-dr);});main.o.sil.style.fillOpacity=String(seg(t,1.4,2.5));}
+  else{parts.forEach(function(p){p.style.strokeDasharray="";p.style.strokeDashoffset="";});main.o.sil.style.fillOpacity="";}
+
+  /* the price scene (real time): Rosebank, then the big campuses nearby, then TutorLink, then zoom in */
+  var leave=1-seg(T,73,74.2),anchors={};
+  town.forEach(function(b){
+    if(b.kind!=="near")return;
+    var k=seg(T,50+b.j*0.22,50.8+b.j*0.22),op=Math.min(1,k*2.5)*leave;
+    var r=drawBuilding(b.o,k,op,false);
+    if(b.anchor)anchors[b.who]=r;
+  });
+  var tagsOut=1-seg(T,56.6,57.4),dim=1-0.55*seg(T,54,54.8);
+  var Lup=40*ts+95*cam.s;
+  /* on small screens TutorLink's tag takes Rosebank's spot above the roof; on wide screens it sits underneath */
+  var small=tts>1.2;
+  placeTag(tagRB,top,seg(T,46,46.8)*tagsOut*(small?1-seg(T,54,54.6):dim),Lup*eo(seg(T,45.8,46.6))+1,false);
+  placeTag(tagUFS,anchors.ufs,seg(T,51.2,52)*tagsOut*dim,Lup,false);
+  placeTag(tagCUT,anchors.cut,seg(T,51.8,52.6)*tagsOut*dim,Lup,false);
+  var tlOp=seg(T,54,54.8)*tagsOut;
+  if(small)placeTag(tagTL,top,tlOp,Lup,false);
+  else placeTag(tagTL,mOp>0.5?P(110,80,0):null,tlOp,40*ts+50*cam.s,true);
+  var hlOp=seg(T,54,54.8)*(1-seg(T,58.4,59.2));
+  if(hlOp>0.002){main.o.hl.setAttribute("d",main.o.sil.getAttribute("d"));setOp(main.o.hl,hlOp);}else hide(main.o.hl);
+
+  drawFiles(t);
+  drawRoom(T);
+
+  /* the learning platform rising behind */
+  var gk=eo(seg(t,30.2,33.2)),gOp=seg(t,30,30.8)*(1-seg(t,38,38.8));
+  drawBuilding(ghost,Math.max(gk,0.003),gOp,true);
+  var gl=seg(t,32.4,33.4)*(1-seg(t,38,38.6));
+  if(gl>0.002){
+    var ga=P(-140,-480,380*gk),g1=[ga[0]+16,ga[1]],g2=[ga[0]+56,ga[1]];
+    ghostLead.setAttribute("d",seg2(g1,g2));
+    ghostLbl.setAttribute("x",(g2[0]+10).toFixed(1));ghostLbl.setAttribute("y",(g2[1]+7).toFixed(1));
+    ghostSub.setAttribute("x",(g2[0]+10).toFixed(1));ghostSub.setAttribute("y",(g2[1]+34*ts).toFixed(1));
+  }
+  [ghostLead,ghostLbl,ghostSub].forEach(function(e){setOp(e,gl);});
+
+  /* stage overlays */
+  wordmark.style.opacity=(clamp(seg(t,1.4,2.4)*(1-seg(t,3.6,4.2))+seg(t,67,68),0,1)).toFixed(3);
+
+  var ki=eo(seg(t,52.6,54)),ko=eio(seg(t,66,67)),cardOp=ki*(1-ko);
+  card.style.opacity=cardOp.toFixed(3);
+  if(cardOp>0.002){
+    var bob=reduce?0:Math.sin(t*1.6)*6,ry2=reduce?0:Math.sin(t*0.8)*5;
+    card.style.transform="translate(-50%,-50%) translate3d(0,"+((1-ki)*60+bob).toFixed(1)+"px,0) rotateX("+lerp(24,7,ki).toFixed(2)+"deg) rotateY("+ry2.toFixed(2)+"deg) scale("+(1-0.3*ko).toFixed(3)+")";
+  }else card.style.transform="translate(-50%,-50%)";
+  cr1.style.opacity=seg(t,53.8,54.6).toFixed(3);cr2.style.opacity=seg(t,55,55.8).toFixed(3);cf.style.opacity=seg(t,56.4,57.2).toFixed(3);
+
+  setCaption(T);
+  setUI(T);
+}
+function placeCityTag(o,r,op){
+  if(!r||op<=0.002){hide(o.g);return;}
+  setOp(o.g,op);
+  o.pin.setAttribute("cx",r[0].toFixed(1));o.pin.setAttribute("cy",r[1].toFixed(1));
+  o.lead.setAttribute("d",seg2(r,[r[0],r[1]-34]));
+  o.txt.setAttribute("x",r[0].toFixed(1));o.txt.setAttribute("y",(r[1]-44).toFixed(1));
+}
+
+/* ---------- caption ---------- */
+var capIdx=-1;
+function setCaption(t){
+  var idx=0;for(var i=0;i<CAPS.length;i++){if(t>=CAPS[i].t)idx=i;}
+  if(idx===capIdx)return;capIdx=idx;
+  var c=CAPS[idx];
+  capEb.textContent=c.eb;capTx.textContent=c.tx;capNote.textContent=c.note||"";capNote.hidden=!c.note;
+  caption.classList.remove("in");void caption.offsetWidth;caption.classList.add("in");
+}
+
+/* ---------- controls ---------- */
+var segs=SCENES.map(function(s,i){
+  var b=document.createElement("button");b.type="button";b.className="seg";b.style.flex=String(s.b-s.a);
+  b.setAttribute("aria-label","Scene "+(i+1)+": "+s.n);b.title=s.n;
+  var f=document.createElement("i");b.appendChild(f);track.appendChild(b);
+  b.addEventListener("click",function(){seek(s.a+0.01);if(!playing)play();});
+  return {b:b,f:f,s:s};
+});
+function fmt(x){x=Math.max(0,Math.floor(x));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0");}
+var lastUI="";
+function setUI(t){
+  segs.forEach(function(g){
+    var k=seg(t,g.s.a,g.s.b);g.f.style.width=(k*100).toFixed(2)+"%";
+    var now=t>=g.s.a&&(t<g.s.b||(g.s.b===END&&t>=END));g.b.classList.toggle("now",now);
+    if(now)g.b.setAttribute("aria-current","step");else g.b.removeAttribute("aria-current");
+  });
+  var s=fmt(t)+" / "+fmt(END);if(s!==lastUI){timeEl.textContent=s;lastUI=s;}
+}
+var playing=false,t=0,last=0;
+var PAUSE='<rect class="f" x="6" y="5" width="4" height="14" rx="1"/><rect class="f" x="14" y="5" width="4" height="14" rx="1"/>';
+var PLAY='<path class="f" d="M7 4.5v15l12-7.5z"/>';
+function syncBtn(){icoPlay.innerHTML=playing?PAUSE:PLAY;btnPlay.setAttribute("aria-label",playing?"Pause":(t>=END?"Play again":"Play"));}
+function play(){if(t>=END)t=0;playing=true;last=performance.now();syncBtn();}
+function pause(){playing=false;syncBtn();}
+function seek(x){t=clamp(x,0,END);render(t);}
+btnPlay.addEventListener("click",function(){playing?pause():play();});
+document.getElementById("btnRestart").addEventListener("click",function(){seek(0);play();});
+document.getElementById("btnFull").addEventListener("click",function(){
+  var p=document.getElementById("player");
+  try{
+    if(document.fullscreenElement){document.exitFullscreen().catch(function(){});}
+    else if(p.requestFullscreen){p.requestFullscreen().catch(function(){});}
+  }catch(e){}
+});
+document.addEventListener("keydown",function(e){
+  var tag=(e.target&&e.target.tagName)||"";
+  if(tag==="BUTTON"||tag==="INPUT"||tag==="SUMMARY"||tag==="A")return;
+  if(e.key===" "||e.key==="k"){e.preventDefault();playing?pause():play();}
+  else if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
+    e.preventDefault();
+    var cur=0;SCENES.forEach(function(s,i){if(t>=s.a)cur=i;});
+    var nx=clamp(cur+(e.key==="ArrowRight"?1:-1),0,SCENES.length-1);seek(SCENES[nx].a+0.01);
+  }
+});
+
+/* sizing: keep text and lines readable on small screens */
+function resize(){
+  var w=stage.clientWidth||1180;
+  ts=clamp(760/w,1,2.1);
+  stage.style.setProperty("--ts",ts.toFixed(3));
+  tts=Math.min(ts,1.4);stage.style.setProperty("--tts",tts.toFixed(3));
+  render(t);
+}
+if(window.ResizeObserver){new ResizeObserver(resize).observe(stage);}else{window.addEventListener("resize",resize);}
+
+function loop(now){
+  if(playing){
+    var dt=Math.min(0.05,(now-last)/1000);last=now;t+=dt;
+    if(t>=END){t=END;playing=false;syncBtn();}
+    render(t);
+  }else last=now;
+  requestAnimationFrame(loop);
+}
+
+if(reduce){t=3.2;render(t);syncBtn();}
+else{render(0);play();}
+resize();
+requestAnimationFrame(loop);
+window.tutorlinkExplainer={seek:function(x){pause();seek(x);},play:play,pause:pause};
+})();
+</script>
+
+</body>
+</html>
